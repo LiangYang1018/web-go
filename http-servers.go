@@ -1,40 +1,35 @@
+//https://www.golangprograms.com/example-to-handle-get-and-post-request-in-golang.html
+
 package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"net/http"
 )
 
 func hello(w http.ResponseWriter, req *http.Request) {
 
-	//var uid string
-
-	var fruit string
-	if req.Method == "GET" {
-		//uid = req.FormValue("uid")
+	switch req.Method {
+	case "GET":
 		fmt.Println("it is a get request")
-		fruit = req.FormValue("fruit")
-	} else if req.Method == "POST" {
-		//uid = req.PostFormValue("uid")
+		fruit := req.FormValue("fruit")
+		fmt.Fprintf(w, "%s receieved!", fruit)
+
+	case "POST":
+		req.ParseForm()
 		fmt.Println("it is a post request")
-		fruit = req.PostFormValue("fruit")
-	}
-	fmt.Fprintf(w, "%s receieved!", fruit)
-}
+		s, _ := ioutil.ReadAll(req.Body)
+		fmt.Fprintf(w, "%s", s)
 
-func headers(w http.ResponseWriter, req *http.Request) {
-
-	for name, headers := range req.Header {
-		for _, h := range headers {
-			fmt.Fprintf(w, "%v: %v\n", name, h)
-		}
+	default:
+		fmt.Fprintf(w, "Sorry, only GET and POST methods are supported.")
 	}
 }
 
 func main() {
 
 	http.HandleFunc("/hello", hello)
-	http.HandleFunc("/headers", headers)
 
 	http.ListenAndServe(":8090", nil)
 }
