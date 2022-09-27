@@ -46,7 +46,7 @@ func hello(w http.ResponseWriter, req *http.Request) {
 
 		fmt.Println("Hash_value: ", data["hash"])
 		fmt.Println("Is_recovered: ", data["is_recovered"])
-
+		fmt.Println("当前时间：", time.Now())
 		fmt.Println("-------------------------------------end---------------------------------")
 
 	default:
