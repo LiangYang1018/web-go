@@ -46,7 +46,19 @@ func hello(w http.ResponseWriter, req *http.Request) {
 
 		fmt.Println("Hash_value: ", data["hash"])
 		fmt.Println("Is_recovered: ", data["is_recovered"])
-		fmt.Println("当前时间：", time.Now())
+
+		trigger_time := time.Unix(int64(data["trigger_time"].(float64)), 0)
+		last_eval_time := time.Unix(int64(data["last_eval_time"].(float64)), 0)
+		last_sent_time := time.Unix(int64(data["last_sent_time"].(float64)), 0)
+		first_trigger_time := time.Unix(int64(data["first_trigger_time"].(float64)), 0)
+
+		fmt.Println("trigger_time:       ", trigger_time)
+		fmt.Println("last_eval_time:     ", last_eval_time)
+		fmt.Println("last_sent_time:     ", last_sent_time)
+		fmt.Println("first_trigger_time: ", first_trigger_time)
+
+		var cstSh, _ = time.LoadLocation("Asia/Shanghai") //上海
+		fmt.Println("上海时间           :", time.Now().In(cstSh).Format("2006-01-02 15:04:05"))
 		fmt.Println("-------------------------------------end---------------------------------\n\n\n")
 
 	default:
