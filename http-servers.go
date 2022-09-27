@@ -9,7 +9,6 @@ import (
 	"net/http/httputil"
 	"regexp"
 	"strconv"
-	"strings"
 	"time"
 )
 
@@ -37,35 +36,18 @@ func hello(w http.ResponseWriter, req *http.Request) {
 		bodyData := string(requestDump)
 		r, _ := regexp.Compile("{[\\s\\S]*}")
 		bodyJson := r.FindString(bodyData)
-		fmt.Println("--------------post body----------------")
+		fmt.Println("--------------------------------post body-------------------------------")
 		fmt.Println(bodyJson)
-		fmt.Println("--------------json字段样例--------------")
+		fmt.Println("--------------------------------json字段样例-----------------------------")
 		jsonData := []byte(bodyJson)
 		var v interface{}
 		json.Unmarshal(jsonData, &v)
 		data := v.(map[string]interface{})
 
-		//tags := data["tags"].([]string)
+		fmt.Println("Hash_value: ", data["hash"])
+		fmt.Println("Is_recovered: ", data["is_recovered"])
 
-		x1 := int32(data["severity"].(float64))
-		fmt.Println(x1)
-
-		//s := reflect.ValueOf(data["tags"])
-
-		// 接口转数组
-		tags := data["tags"].([]interface{})
-
-		s8 := tags[8].(string)
-		nodeCode := strings.Split(s8, "=")[1]
-		fmt.Println(nodeCode)
-		var tagsString string
-		for _, tag := range tags {
-			tagsString = tagsString + tag.(string) + " "
-		}
-
-		fmt.Println(tagsString)
-
-		fmt.Println(data["first_trigger_time"])
+		fmt.Println("-------------------------------------end---------------------------------")
 
 	default:
 		fmt.Fprintf(w, "Sorry, only GET and POST methods are supported.")
